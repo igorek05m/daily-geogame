@@ -5,6 +5,7 @@ import { GameHeader } from "@/app/components/GameHeader";
 import { GuessInput } from "@/app/components/GuessInput";
 import { GuessList } from "@/app/components/GuessList";
 import { HintGrid } from '@/app/components/HintGrid';
+import { LastHint } from '@/app/components/LastHint';
 import { WorldMap } from "@/app/components/Map";
 import { Footer } from "@/app/components/Footer";
 import { GAME_START_DATE } from "@/app/types";
@@ -50,6 +51,12 @@ export default function Home() {
 
         <GuessInput 
            onGuess={submitGuess} 
+           gameOver={gameOver} 
+        />
+
+        <LastHint 
+           hintPackages={hintPackages} 
+           guesses={guesses} 
            gameOver={gameOver} 
         />
 

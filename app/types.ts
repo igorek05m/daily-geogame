@@ -62,3 +62,8 @@ export interface Props {
   isOpen: boolean;
   onClose: () => void;
 }
+
+export interface GuessInputProps {
+  onGuess: (name: string) => void;
+  gameOver: boolean;
+}

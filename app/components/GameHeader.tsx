@@ -1,4 +1,5 @@
 import { GameHeaderProps } from "@/app/types";
+import { ChevronLeft, ChevronRight, Trophy, Users } from "lucide-react";
 
 export const GameHeader = ({ dayNumber, gameDate, userStats, globalStats, changeDate, isToday, isStart }: GameHeaderProps) => {
   return (
@@ -9,7 +10,7 @@ export const GameHeader = ({ dayNumber, gameDate, userStats, globalStats, change
           disabled={isStart}
           className={`text-gray-400 px-2 ${isStart ? "opacity-30 cursor-not-allowed" : "hover:text-white"}`}
         >
-          ◀
+          <ChevronLeft />
         </button>
         <div className="text-center">
           <h1 className="text-xl font-bold tracking-wider text-green-400">DAILY GUESS #{dayNumber}</h1>
@@ -20,17 +21,17 @@ export const GameHeader = ({ dayNumber, gameDate, userStats, globalStats, change
           disabled={isToday} 
           className={`px-2 ${isToday ? "text-gray-700 cursor-not-allowed" : "text-gray-400 hover:text-white"}`}
         >
-          ▶
+          <ChevronRight />
         </button>
       </div>
       
       <div className="flex gap-2">
-        <div className="bg-[#333] px-3 py-1 rounded text-yellow-400 border border-yellow-400/20">
-          <span>🏆 You: {userStats.wins}</span>
+        <div className="bg-[#333] px-3 py-1 rounded text-yellow-400 border border-yellow-400/20 flex items-center gap-2">
+          <Trophy size={16} /> <span>You: {userStats.wins}</span>
         </div>
         
-        {/* <div className="bg-[#333] px-3 py-1 rounded text-blue-400 border border-blue-400/20">
-          <span>🌍 Players: {globalStats?.totalPlayers || 0}</span>
+        {/* <div className="bg-[#333] px-3 py-1 rounded text-blue-400 border border-blue-400/20 flex items-center gap-2">
+          <Users size={16} /> <span>Players: {globalStats?.totalPlayers || 0}</span>
         </div> */}
       </div>
     </div>

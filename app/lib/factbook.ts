@@ -22,7 +22,6 @@ function smartTruncate(str: string, len = 130) {
     if (!str) return "No data";
     if (str.length <= len) return str;
     const sub = str.substring(0, len);
-    // Ucinamy do ostatniej spacji
     return sub.substring(0, sub.lastIndexOf(" ")) + "...";
 }
 

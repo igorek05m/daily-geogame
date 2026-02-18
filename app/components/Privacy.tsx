@@ -1,4 +1,3 @@
-import React from 'react';
 import { Modal } from './Modal';
 import { Props } from '@/app/types';
 
@@ -13,7 +12,7 @@ export const PrivacyModal = ({ isOpen, onClose }: Props) => {
 
       <h3 className="text-white font-bold mb-1 mt-4">2. Cookies & Local Storage</h3>
       <p>
-        To recognize you when you come back, the game creates a random, anonymous ID (Session ID) stored in your browser's cookies.
+        To recognize you when you come back, the game creates a random, anonymous ID (Session ID) stored in your browser&apos;s cookies.
       </p>
       <ul className="list-disc list-inside mt-2 opacity-80 text-xs">
         <li><strong>geo_session:</strong> An anonymous ID used to sync your progress with the server.</li>
@@ -21,7 +20,7 @@ export const PrivacyModal = ({ isOpen, onClose }: Props) => {
 
       <h3 className="text-white font-bold mb-1 mt-4">3. Analytics</h3>
       <p>
-        I aggregate anonymous game results (e.g., "50 people won today") to display global statistics. This data cannot be traced back to you personally.
+        I aggregate anonymous game results (e.g., &quot;50 people won today&quot;) to display global statistics. This data cannot be traced back to you personally.
       </p>
 
       <h3 className="text-white font-bold mb-1 mt-4">4. Contact</h3>

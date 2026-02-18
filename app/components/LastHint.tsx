@@ -71,9 +71,9 @@ export const LastHint: React.FC<LastHintProps> = ({ hintPackages, guesses, gameO
             
             <button 
                 onClick={scrollToAllHints}
-                className="w-full text-center text-[14px] text-gray-500 hover:text-white mt-1 pt-2 border-t border-[#333] flex items-center justify-center gap-1 transition-colors"
+                className="w-full text-center text-[14px] text-gray-500 hover:text-white mt-1 pt-2 border-t border-[#333] flex items-center justify-center gap-1 transition-colors cursor-pointer"
             >   
-                <span className="flex items-center gap-1 animate-bounce" style={{ animationDuration: '1s' }}>
+                <span className="flex items-center gap-1 animate-bounce-subtle">
                     View all hints <ArrowDown size={14} />
                 </span>
             </button>

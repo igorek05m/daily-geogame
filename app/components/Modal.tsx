@@ -11,7 +11,7 @@ export const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
       >
         <div className="flex justify-between items-center p-4 border-b border-[#333]">
           <h2 className="text-xl font-bold text-white uppercase tracking-wider">{title}</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-white transition-colors text-2xl leading-none">
+          <button onClick={onClose} className="text-gray-400 hover:text-white transition-colors text-2xl leading-none cursor-pointer">
             &times;
           </button>
         </div>

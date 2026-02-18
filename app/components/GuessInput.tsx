@@ -40,6 +40,12 @@ export const GuessInput = ({ onGuess, gameOver }: GuessInputProps) => {
       return;
     }
 
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      if (currentFilteredCountries[selectedIndex]) {
+        setInputVal(currentFilteredCountries[selectedIndex].name);
+      }
+    }
     if (e.key === 'ArrowDown') {
       e.preventDefault();
       setSelectedIndex(prev => Math.min(prev + 1, currentFilteredCountries.length - 1));
@@ -99,7 +105,7 @@ export const GuessInput = ({ onGuess, gameOver }: GuessInputProps) => {
         <button 
           onClick={handleGuess}
           disabled={gameOver || !inputVal}
-          className="bg-green-700 hover:bg-green-600 text-white px-6 font-bold border border-green-500 disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_0_10px_rgba(0,255,0,0.2)]"
+          className="bg-green-700 hover:bg-green-600 text-white px-6 font-bold border border-green-500 disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed shadow-[0_0_10px_rgba(0,255,0,0.2)] rounded-sm"
         >
           GUESS
         </button>

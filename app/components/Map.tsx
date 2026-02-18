@@ -119,9 +119,9 @@ export const WorldMap: FC<WorldMapProps> = ({ guesses, targetCountry }) => {
         {({ zoomIn, zoomOut, resetTransform }) => (
           <>
             <div className="absolute top-2 right-2 flex flex-col gap-1 z-10">
-              <button className="bg-gray-800 text-white p-1 px-3" onClick={() => zoomIn()}>+</button>
-              <button className="bg-gray-800 text-white p-1 px-3" onClick={() => zoomOut()}>-</button>
-              <button className="bg-gray-800 text-white p-1 px-3" onClick={() => resetTransform()}>R</button>
+              <button className="bg-gray-800 text-white p-1 px-3 hover:bg-gray-700 cursor-pointer" onClick={() => zoomIn()}>+</button>
+              <button className="bg-gray-800 text-white p-1 px-3 hover:bg-gray-700 cursor-pointer" onClick={() => zoomOut()}>-</button>
+              <button className="bg-gray-800 text-white p-1 px-3 hover:bg-gray-700 cursor-pointer" onClick={() => resetTransform()}>R</button>
             </div>
 
             <TransformComponent wrapperClass="!w-full !h-full" contentClass="!w-full !h-full">

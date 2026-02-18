@@ -29,14 +29,14 @@ export const Footer = () => {
             
             <button 
               onClick={() => setShowRules(true)} 
-              className="hover:text-green-400 transition-colors text-left"
+              className="hover:text-green-400 transition-colors text-left cursor-pointer"
             >
               How to play?
             </button>
             
             <button 
               onClick={() => setShowPrivacy(true)} 
-              className="hover:text-green-400 transition-colors text-left"
+              className="hover:text-green-400 transition-colors text-left cursor-pointer"
             >
               Privacy Policy
             </button>

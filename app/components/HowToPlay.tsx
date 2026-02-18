@@ -49,7 +49,7 @@ export const HowToPlayModal = ({ isOpen, onClose }: HowToPlayProps) => {
             </div>
           </div>
           
-           <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center shrink-0">
                <ArrowUp className="text-blue-500" size={16} strokeWidth={2.5} style={{ transform: 'rotate(45deg)' }} />
             </div>

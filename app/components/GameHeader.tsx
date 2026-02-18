@@ -8,7 +8,7 @@ export const GameHeader = ({ dayNumber, gameDate, userStats, globalStats, change
         <button 
           onClick={() => changeDate(-1)} 
           disabled={isStart}
-          className={`text-gray-400 px-2 ${isStart ? "opacity-30 cursor-not-allowed" : "hover:text-white"}`}
+          className={`text-gray-400 px-2 ${isStart ? "opacity-30 cursor-not-allowed " : "hover:text-white cursor-pointer"}`}
         >
           <ChevronLeft />
         </button>
@@ -19,7 +19,7 @@ export const GameHeader = ({ dayNumber, gameDate, userStats, globalStats, change
         <button 
           onClick={() => changeDate(1)} 
           disabled={isToday} 
-          className={`px-2 ${isToday ? "text-gray-700 cursor-not-allowed" : "text-gray-400 hover:text-white"}`}
+          className={`px-2 ${isToday ? "text-gray-700 cursor-not-allowed" : "text-gray-400 hover:text-white cursor-pointer"}`}
         >
           <ChevronRight />
         </button>

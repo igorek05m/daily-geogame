@@ -2,6 +2,8 @@
 
 A simple, daily geography guessing game inspired by Wordle, Travle and Globle.
 
+**Live demo:** [https://daily-geogame.vercel.app](https://daily-geogame.vercel.app)
+
 ## How it works
 
 - **Daily Mode:** Every day at midnight (UTC), a new country is selected.
@@ -10,6 +12,7 @@ A simple, daily geography guessing game inspired by Wordle, Travle and Globle.
 - **No Login:** Stats are saved locally and synced anonymously via a session ID.
 
 ## Tech Stack
+
 - **Next.js** (App Router)
 - **TypeScript**
 - **Tailwind CSS**
@@ -35,7 +38,9 @@ A simple, daily geography guessing game inspired by Wordle, Travle and Globle.
     ```MONGODB_URI=mongodb+srv://...```
 
 4. Run dev server
-    ```pnpm dev```
+    ``` bash
+    pnpm dev
+    ```
 
 
 ## Credits 

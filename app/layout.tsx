@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Daily Geo Guess",
+  title: "Daily GeoGame - Guess the Country",
   description: "Guess the country based on hints!",
 };
 

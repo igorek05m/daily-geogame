@@ -1,20 +1,5 @@
 import React from 'react';
-
-export type Hint = {
-  label: string;
-  value: string;
-};
-
-export type HintPackage = {
-  title: string;
-  hints: Hint[];
-};
-
-interface HintGridProps {
-  hintPackages: HintPackage[];
-  guesses: unknown[];
-  gameOver: boolean;
-}
+import { HintGridProps } from '@/app/types';
 
 export const HintGrid: React.FC<HintGridProps> = ({ hintPackages, guesses, gameOver }) => {
   

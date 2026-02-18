@@ -1,5 +1,5 @@
 {
-  "name": "geograph",
+  "name": "daily-geogame",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,15 +9,12 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@prisma/client": "^6.15.0",
-    "@prisma/extension-accelerate": "^2.0.2",
     "axios": "^1.11.0",
     "cookies-next": "^6.1.1",
     "d3-geo": "^3.1.1",
     "framer-motion": "^12.34.1",
     "mongodb": "^6.19.0",
     "next": "15.5.2",
-    "prisma": "^6.15.0",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-svg": "^16.3.0",

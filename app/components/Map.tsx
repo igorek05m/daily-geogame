@@ -1,13 +1,8 @@
 "use client"
-import React from "react";
+import { useEffect, useState, useCallback, FC } from "react";
 import { ReactSVG } from "react-svg";
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
-import { Country } from "../page";
-
-interface WorldMapProps {
-  guesses: Country[];
-  targetCountry: Country | null;
-}
+import { Country, WorldMapProps } from "@/app/types";
 
 const colorLegend = [
   { label: "Target", color: "#2E7D32" },
@@ -20,11 +15,10 @@ const colorLegend = [
 const LoadingMap = () => <span className="text-white">Loading map...</span>;
 const FallbackMap = () => <span className="text-white">SVG not found</span>;
 
-export const WorldMap: React.FC<WorldMapProps> = ({ guesses, targetCountry }) => {
+export const WorldMap: FC<WorldMapProps> = ({ guesses, targetCountry }) => {
+  const [svgElement, setSvgElement] = useState<SVGSVGElement | null>(null);
 
-  const [svgElement, setSvgElement] = React.useState<SVGSVGElement | null>(null);
-
-  const handleBeforeInjection = React.useCallback((svg: SVGSVGElement) => {
+  const handleBeforeInjection = useCallback((svg: SVGSVGElement) => {
     if (!svg) return;
     svg.setAttribute("width", "100%");
     svg.setAttribute("height", "100%");
@@ -45,7 +39,7 @@ export const WorldMap: React.FC<WorldMapProps> = ({ guesses, targetCountry }) =>
     });
   }, []);
 
-  const handleAfterInjection = React.useCallback((error: Error | SVGSVGElement, svg?: SVGSVGElement) => {
+  const handleAfterInjection = useCallback((error: Error | SVGSVGElement, svg?: SVGSVGElement) => {
     if (error && (error as any).tagName === "svg") {
         setSvgElement(error as SVGSVGElement);
     } else if (svg) {
@@ -53,7 +47,7 @@ export const WorldMap: React.FC<WorldMapProps> = ({ guesses, targetCountry }) =>
     } 
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!svgElement || !targetCountry) return;
     
     const paths = svgElement.querySelectorAll('path');
@@ -66,8 +60,14 @@ export const WorldMap: React.FC<WorldMapProps> = ({ guesses, targetCountry }) =>
       if (!code) return;
 
       const el = svgElement.querySelector(`[id="${code}"]`) || svgElement.getElementById(code);
-
       if (!el) return;
+
+      let titleEl = el.querySelector('title') as SVGTitleElement | null;
+      if (!titleEl) {
+          titleEl = document.createElementNS("http://www.w3.org/2000/svg", "title");
+          el.appendChild(titleEl);
+      }
+      titleEl.textContent = country.name;
 
       let connection: "none" | "region" | "subregion" | "neighbor" | "guess" = "none";
       

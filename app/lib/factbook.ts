@@ -1,5 +1,6 @@
 
 import axios from 'axios';
+import { HintPackage } from "@/app/types";
 
 const REGIONS = [
   "africa", 
@@ -16,11 +17,6 @@ const REGIONS = [
 ];
 
 const BASE_URL = "https://raw.githubusercontent.com/factbook/factbook.json/master";
-
-export type HintPackage = {
-  title: string;
-  hints: { label: string; value: string }[];
-};
 
 function smartTruncate(str: string, len = 130) {
     if (!str) return "No data";

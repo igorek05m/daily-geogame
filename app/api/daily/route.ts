@@ -2,7 +2,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import clientPromise from '@/app/lib/mongodb';
 import countries from '@/app/lib/countries.json';
-import { fetchFactbookData, generateHintPackages, HintPackage } from '@/app/lib/factbook';
+import { fetchFactbookData, generateHintPackages } from '@/app/lib/factbook';
+import { HintPackage } from '@/app/types';
 import axios from 'axios';
 
 async function fetchCountryDetails(alpha2: string) {

@@ -9,7 +9,7 @@ import { cookies } from 'next/headers';
 
 async function fetchCountryDetails(alpha2: string) {
   try {
-    const res = await axios.get(`/api/country?code=${alpha2}`, {
+    const res = await axios.get(`https://restcountries.com/v3.1/alpha/${alpha2}`, {
       timeout: 5000 
     });
 

@@ -42,72 +42,56 @@ export function useDailyGame() {
 
     useEffect(() => {
         async function init() {
-        try {
-            setLoading(true);
-            const gameRes = await fetch(`/api/daily?date=${gameDate}`);
-            const gameData = await gameRes.json();
-            
-            let currentGameTarget: Country | null = null;
-            if (gameData.targetCountry) {
-                currentGameTarget = gameData.targetCountry;
-                setTargetCountry(currentGameTarget);
-                setHintPackages(gameData.hintPackages || []);
-            }
+            try {
+                setLoading(true);
 
-            if (currentGameTarget) {
-            const progRes = await fetch(`/api/progress?date=${gameDate}`);
+                const [progRes, gameRes, statsRes] = await Promise.all([
+                    fetch(`/api/progress?date=${gameDate}`),
+                    fetch(`/api/daily?date=${gameDate}`),
+                    fetch(`/api/stats?date=${gameDate}`)
+                ]);
+
+                let isWon = false;
+                let currentGuesses: Country[] = [];
+
                 if (progRes.ok) {
                     const progData = await progRes.json();
-                    
+
                     if (progData.stats) setUserStats(progData.stats);
 
-                    if (progData.guesses && Array.isArray(progData.guesses)) {
-                        setGuesses(progData.guesses);
-                        
-                        const newestGuess = progData.guesses[0];
-                        if (newestGuess && newestGuess.name === currentGameTarget.name) {
-                            setGameOver(true);
-                        } else if (progData.guesses.length >= 6) {
-                            setGameOver(true);
-                        }
+                    if (progData.guesses) {
+                        currentGuesses = progData.guesses;
+                        setGuesses(currentGuesses);
+                    }
+                    isWon = progData.won;
+                    
+                    if (isWon || currentGuesses.length >= 6) {
+                        setGameOver(true);
                     }
                 }
+
+                if (gameRes.ok) {
+                    const gameData = await gameRes.json();
+                    setHintPackages(gameData.hintPackages || []);
+                    setTargetCountry(gameData.targetCountry || null); 
+                }
+
+                if (statsRes.ok) {
+                    const statsData = await statsRes.json();
+                    setGlobalStats(statsData || { totalPlayers: 0, totalWinners: 0, winRate: 0 });
+                }
+
+            } catch (error) {
+                console.error("Failed to init game", error);
+            } finally {
+                setLoading(false);
             }
-
-
-            const statsRes = await fetch(`/api/stats?date=${gameDate}`);
-            if (statsRes.ok) {
-                const statsData = await statsRes.json();
-                setGlobalStats(statsData || { totalPlayers: 0, totalWinners: 0, winRate: 0 });
-            }
-
-        } catch (error) {
-            console.error("Failed to init game", error);
-        } finally {
-            setLoading(false);
-        }
         }
         init();
     }, [gameDate]);
 
-    const saveProgress = async (newGuesses: Country[], isWin: boolean) => {
-        try {
-            await fetch('/api/progress', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                date: gameDate,
-                guesses: newGuesses,
-                won: isWin,
-            })
-            });
-        } catch (e) {
-            console.error("Failed to save progress", e);
-        }
-    };
-
     const submitGuess = async (name: string) => {
-        if (!targetCountry || gameOver) return;
+        if (gameOver) return;
 
         const basic = countries.find(c => c.name.toLowerCase() === name.toLowerCase());
         if (!basic) {
@@ -121,7 +105,7 @@ export function useDailyGame() {
         }
 
         try {
-            const res = await fetch(`https://restcountries.com/v3.1/alpha/${basic.alpha2}`);
+            const res = await fetch(`/api/country?code=${basic.alpha2}`);
             if (!res.ok) throw new Error("Failed to fetch country data");
             const data = await res.json();
             const details = data[0];
@@ -142,15 +126,30 @@ export function useDailyGame() {
             const newGuesses = [countryData, ...guesses];
             setGuesses(newGuesses);
 
-            let won = false;
-            if (countryData.name === targetCountry?.name) {
-                setGameOver(true);
-                won = true;
-            } else if (newGuesses.length >= 6) {
-                setGameOver(true);
-            }
+            const progressRes = await fetch('/api/progress', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ date: gameDate, guesses: newGuesses })
+            });
 
-            await saveProgress(newGuesses, won);
+            if (progressRes.ok) {
+                const progData = await progressRes.json();
+                
+                if (progData.guesses) {
+                    setGuesses(progData.guesses);
+                }
+
+                if (progData.won || newGuesses.length >= 6) {
+                    setGameOver(true);
+                }
+
+                const gameRes = await fetch(`/api/daily?date=${gameDate}`);
+                if (gameRes.ok) {
+                    const gameData = await gameRes.json();
+                    setHintPackages(gameData.hintPackages || []);
+                    if (gameData.targetCountry) setTargetCountry(gameData.targetCountry);
+                }
+            }
         } catch (err) {
             console.error(err);
             alert("Error fetching country data. Try again.");

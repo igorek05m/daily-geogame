@@ -1,6 +1,6 @@
 import React from 'react';
 import { HintPackage } from '@/app/types';
-import { Lightbulb, Info, ArrowDown } from "lucide-react";
+import { Lightbulb, ArrowDown } from "lucide-react";
 
 interface LastHintProps {
   hintPackages: HintPackage[];

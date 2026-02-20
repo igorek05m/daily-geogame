@@ -1,7 +1,7 @@
 import { GameHeaderProps } from "@/app/types";
-import { ChevronLeft, ChevronRight, Trophy, Users } from "lucide-react";
+import { ChevronLeft, ChevronRight, Trophy } from "lucide-react";
 
-export const GameHeader = ({ dayNumber, gameDate, userStats, globalStats, changeDate, isToday, isStart }: GameHeaderProps) => {
+export const GameHeader = ({ dayNumber, gameDate, userStats, changeDate, isToday, isStart }: GameHeaderProps) => {
   return (
     <div className="w-full max-w-4xl border border-[#333] bg-[#1e1e1e] p-2 flex flex-col md:flex-row justify-between items-center shadow-lg rounded-sm gap-2">
       <div className="flex items-center gap-4">

@@ -25,8 +25,8 @@ export default function Home() {
     submitGuess,
     todayStr 
   } = useDailyGame();
-
-  if (loading || !targetCountry) return <div className="min-h-screen bg-[#121212] text-white p-10 flex items-center justify-center font-mono">Loading Daily Challenge...</div>;
+  
+  if (loading) return <div className="min-h-screen bg-[#121212] text-white p-10 flex items-center justify-center font-mono">Loading Daily Challenge...</div>;
 
   return (
     <div className="min-h-screen bg-[#121212] text-[#e0e0e0] font-mono flex flex-col items-center">

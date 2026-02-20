@@ -33,7 +33,7 @@ export async function fetchFactbookData(fipsCode: string): Promise<any | null> {
       if (response.status === 200) {
         return response.data;
       }
-    } catch (error) {
+    } catch (e) {
         // Not found, try next region
     }
   }

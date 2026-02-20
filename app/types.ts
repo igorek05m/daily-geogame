@@ -11,6 +11,9 @@ export type Country = {
   flag?: string;
   region?: string;
   subregion?: string;
+  distance?: number; 
+  bearing?: number;
+  connection?: "guess" | "neighbor" | "subregion" | "region" | "none";
 };
 
 export type HintPackage = {
@@ -65,5 +68,11 @@ export interface Props {
 
 export interface GuessInputProps {
   onGuess: (name: string) => void;
+  gameOver: boolean;
+}
+
+export interface GuessListProps {
+  guesses: Country[];
+  targetCountry: Country | null;
   gameOver: boolean;
 }

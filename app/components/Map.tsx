@@ -1,8 +1,9 @@
 "use client"
+
 import { useEffect, useState, useCallback, FC } from "react";
 import { ReactSVG } from "react-svg";
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
-import { Country, WorldMapProps } from "@/app/types";
+import { WorldMapProps } from "@/app/types";
 
 const colorLegend = [
   { label: "Target", color: "#2E7D32" },
@@ -24,35 +25,35 @@ export const WorldMap: FC<WorldMapProps> = ({ guesses, targetCountry }) => {
     svg.setAttribute("height", "100%");
     
     if (!svg.getAttribute("viewBox")) {
-        svg.setAttribute("viewBox", "0 0 1010 666"); 
+      svg.setAttribute("viewBox", "0 0 1010 666"); 
     }
     
     svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
     
     svg.querySelectorAll('path').forEach(el => {
-       if (el.id) {
-          el.id = el.id.replace(/-.*/, ''); 
-          el.setAttribute("fill", "#555555");
-          el.setAttribute("stroke", "#333");
-          el.setAttribute("stroke-width", "0.5");
-       }
+      if (el.id) {
+      el.id = el.id.replace(/-.*/, ''); 
+      el.setAttribute("fill", "#555555");
+      el.setAttribute("stroke", "#333");
+      el.setAttribute("stroke-width", "0.5");
+      }
     });
   }, []);
 
   const handleAfterInjection = useCallback((error: Error | SVGSVGElement, svg?: SVGSVGElement) => {
     if (error && (error as any).tagName === "svg") {
-        setSvgElement(error as SVGSVGElement);
+      setSvgElement(error as SVGSVGElement);
     } else if (svg) {
-        setSvgElement(svg);
+      setSvgElement(svg);
     } 
   }, []);
 
   useEffect(() => {
-    if (!svgElement || !targetCountry) return;
+    if (!svgElement) return;
     
     const paths = svgElement.querySelectorAll('path');
     paths.forEach(p => {
-        p.setAttribute("fill", "#555555");
+      p.setAttribute("fill", "#555555");
     });
 
     guesses.forEach((country) => {
@@ -64,22 +65,14 @@ export const WorldMap: FC<WorldMapProps> = ({ guesses, targetCountry }) => {
 
       let titleEl = el.querySelector('title') as SVGTitleElement | null;
       if (!titleEl) {
-          titleEl = document.createElementNS("http://www.w3.org/2000/svg", "title");
-          el.appendChild(titleEl);
+        titleEl = document.createElementNS("http://www.w3.org/2000/svg", "title");
+        el.appendChild(titleEl);
       }
       titleEl.textContent = country.name;
 
-      let connection: "none" | "region" | "subregion" | "neighbor" | "guess" = "none";
-      
-      const isTarget = targetCountry.alpha3Code === country.alpha3Code;
-      const isNeighbor = targetCountry.borders?.includes(country.alpha3Code);
-      const isSameSubregion = targetCountry.subregion === country.subregion;
-      const isSameRegion = targetCountry.region === country.region;
+      const connection = country.connection || "none";
 
-      if (isTarget) connection = "guess";
-      else if (isNeighbor) connection = "neighbor";
-      else if (isSameSubregion) connection = "subregion";
-      else if (isSameRegion) connection = "region";
+      console.log(connection, country.name, country);
 
       switch (connection) {
         case "guess":
@@ -136,15 +129,15 @@ export const WorldMap: FC<WorldMapProps> = ({ guesses, targetCountry }) => {
             </TransformComponent>
             
             <div className="absolute bottom-2 left-2 bg-black/80 p-2 rounded text-xs text-white z-10 border border-gray-700 pointer-events-none">
-                 <h4 className="font-bold mb-1 border-b border-gray-600 pb-1">Legend</h4>
-                 <div className="flex flex-col gap-1">
-                     {colorLegend.map(l => (
-                         <div key={l.label} className="flex items-center gap-2">
-                             <span className="block w-3 h-3 rounded-full" style={{ backgroundColor: l.color }}></span>
-                             <span>{l.label}</span>
-                         </div>
-                     ))}
-                 </div>
+              <h4 className="font-bold mb-1 border-b border-gray-600 pb-1">Legend</h4>
+              <div className="flex flex-col gap-1">
+                {colorLegend.map(l => (
+                  <div key={l.label} className="flex items-center gap-2">
+                    <span className="block w-3 h-3 rounded-full" style={{ backgroundColor: l.color }}></span>
+                    <span>{l.label}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </>
         )}

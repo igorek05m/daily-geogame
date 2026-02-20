@@ -1,13 +1,6 @@
 import React from 'react';
-import { Country } from '@/app/types';
-import { getDistanceFromLatLonInKm, getBearingAngle } from "@/app/lib/geoUtils";
+import { GuessListProps } from '@/app/types';
 import { Check, X, MapPin, Globe, PartyPopper, Square, ArrowUp, Footprints } from "lucide-react";
-
-interface GuessListProps {
-  guesses: Country[];
-  targetCountry: Country;
-  gameOver: boolean;
-}
 
 export const GuessList = ({ guesses, targetCountry, gameOver }: GuessListProps) => {
   return (
@@ -16,7 +9,7 @@ export const GuessList = ({ guesses, targetCountry, gameOver }: GuessListProps) 
         <Footprints size={16} /> LAST GUESSES:
       </h2>
       
-      {gameOver && (
+      {gameOver && targetCountry && (
         <div className="mt-4 p-4 bg-green-900/30 border border-green-600 rounded text-center">
           <h3 className="text-xl font-bold text-green-400 flex items-center justify-center gap-2">
             <PartyPopper size={24} /> GAME OVER <PartyPopper size={24} />
@@ -30,20 +23,12 @@ export const GuessList = ({ guesses, targetCountry, gameOver }: GuessListProps) 
 
       <ul className="space-y-2 mt-4">
         {guesses.slice().reverse().map((guess, idx) => {
-          const distance = getDistanceFromLatLonInKm(
-            guess.latlng[0], guess.latlng[1], 
-            targetCountry.latlng[0], targetCountry.latlng[1]
-          );
-          const bearingAngle = getBearingAngle(
-            guess.latlng[0], guess.latlng[1], 
-            targetCountry.latlng[0], targetCountry.latlng[1]
-          );
-          const isCorrect = guess.name === targetCountry.name;
+          const distance = guess.distance;
+          const bearingAngle = guess.bearing;
+          const connection = guess.connection || "none";
+          
+          const isCorrect = distance === 0 || (targetCountry && guess.name === targetCountry.name);
           const guessNum = idx + 1;
-
-          const isNeighbor = targetCountry.borders?.includes(guess.alpha3Code);
-          const isSameSubregion = targetCountry.subregion === guess.subregion;
-          const isClose = distance < 2000;
 
           let Icon = X;
           let colorClass = "text-red-500 bg-red-500/10 border-red-500/20";
@@ -51,10 +36,10 @@ export const GuessList = ({ guesses, targetCountry, gameOver }: GuessListProps) 
           if (isCorrect) {
             Icon = Check;
             colorClass = "text-green-500 bg-green-500/10 border-green-500/20";
-          } else if (isNeighbor) {
+          } else if (connection === "neighbor") {
             Icon = MapPin; 
             colorClass = "text-yellow-500 bg-yellow-500/10 border-yellow-500/20";
-          } else if (isSameSubregion || isClose) {
+          } else if (connection === "subregion") {
             Icon = Globe;
             colorClass = "text-orange-500 bg-orange-500/10 border-orange-500/20";
           }
@@ -75,7 +60,7 @@ export const GuessList = ({ guesses, targetCountry, gameOver }: GuessListProps) 
                 </span>
               </div>
 
-              {!isCorrect && (
+              {!isCorrect && distance !== undefined && bearingAngle !== undefined && (
                 <div className="flex flex-col items-end gap-1 text-xs md:text-sm whitespace-nowrap">
                   <span className={`font-mono font-bold ${distance < 2000 ? "text-orange-400" : "text-gray-500"}`}>
                     {distance.toLocaleString()} km

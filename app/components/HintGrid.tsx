@@ -20,8 +20,8 @@ export const HintGrid: React.FC<HintGridProps> = ({ hintPackages, guesses, gameO
 
     const allHints = hintPackages.flatMap(pkg => 
         pkg.hints.map(hint => ({
-        ...hint,
-        packageTitle: pkg.title 
+            ...hint,
+            packageTitle: pkg.title 
         }))
     );
 
@@ -41,7 +41,7 @@ export const HintGrid: React.FC<HintGridProps> = ({ hintPackages, guesses, gameO
                         <div 
                             key={`${hint.packageTitle}-${hint.label}-${idx}`} 
                             className={`
-                                p-3 border rounded transition-all duration-500 relative overflow-hidden flex flex-col justify-between
+                                p-3 border rounded transition-all duration-500 relative overflow-hidden flex flex-col
                                 ${!locked 
                                 ? "border-gray-600 bg-[#121212] shadow-[0_0_10px_rgba(0,0,0,0.3)]" 
                                 : "border-[#333] bg-[#0f0f0f] opacity-70 select-none grayscale"

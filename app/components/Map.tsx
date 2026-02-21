@@ -72,8 +72,6 @@ export const WorldMap: FC<WorldMapProps> = ({ guesses, targetCountry }) => {
 
       const connection = country.connection || "none";
 
-      console.log(connection, country.name, country);
-
       switch (connection) {
         case "guess":
           el.setAttribute("fill", "#2E7D32"); 

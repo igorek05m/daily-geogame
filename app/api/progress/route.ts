@@ -33,19 +33,28 @@ export async function POST(req: NextRequest) {
             const targetLng = dailyGame.targetCountry.latlng[1];
 
             guesses = guesses.map((g: any) => {
-                const distance = Math.round(getDistanceFromLatLonInKm(g.latlng[0], g.latlng[1], targetLat, targetLng));
-                const bearing = Math.round(getBearingAngle(g.latlng[0], g.latlng[1], targetLat, targetLng));
+                const lat = Array.isArray(g.latlng) && g.latlng.length >= 2 ? g.latlng[0] : 0;
+                const lng = Array.isArray(g.latlng) && g.latlng.length >= 2 ? g.latlng[1] : 0;
+                
+                const distance = Math.round(getDistanceFromLatLonInKm(lat, lng, targetLat, targetLng));
+                const bearing = Math.round(getBearingAngle(lat, lng, targetLat, targetLng));
 
                 let connection = "none";
-                if (dailyGame.targetCountry.alpha3Code === g.alpha3Code) connection = "guess";
-                else if (dailyGame.targetCountry.borders?.includes(g.alpha3Code)) connection = "neighbor";
-                else if (dailyGame.targetCountry.subregion === g.subregion) connection = "subregion";
-                else if (dailyGame.targetCountry.region === g.region) connection = "region";
+                
+                if (g.alpha3Code && dailyGame.targetCountry.alpha3Code) {
+                    if (dailyGame.targetCountry.alpha3Code === g.alpha3Code) connection = "guess";
+                    else if (dailyGame.targetCountry.borders?.includes(g.alpha3Code)) connection = "neighbor";
+                    else if (dailyGame.targetCountry.subregion === g.subregion) connection = "subregion";
+                    else if (dailyGame.targetCountry.region === g.region) connection = "region";
+                } else if (g.connection) {
+                    connection = g.connection; 
+                }
 
                 return { 
                     name: g.name,
                     alpha2Code: g.alpha2Code, 
                     flag: g.flag,
+                    latlng: g.latlng,
                     distance, 
                     bearing, 
                     connection, 

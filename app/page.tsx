@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense, useState, useEffect } from "react";
 import { useDailyGame } from "@/app/hooks/useDailyGame";
 import { GameHeader } from "@/app/components/GameHeader";
 import { GuessInput } from "@/app/components/GuessInput";
@@ -8,23 +9,45 @@ import { HintGrid } from '@/app/components/HintGrid';
 import { LastHint } from '@/app/components/LastHint';
 import { WorldMap } from "@/app/components/Map";
 import { Footer } from "@/app/components/Footer";
+import { StatsModal } from "@/app/components/StatsModal";
 import { GAME_START_DATE } from "@/app/types";
 
 export default function Home() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#121212] text-white p-10 flex items-center justify-center font-mono">Loading Daily Challenge...</div>}>
+      <GameContent />
+    </Suspense>
+  );
+}
+
+function GameContent() {
   const { 
     gameDate, 
     dayNumber, 
     guesses, 
     targetCountry, 
-    gameOver, 
+    gameOver,
+    hasWon,
     hintPackages, 
     loading, 
     userStats,
     globalStats,
     changeDate, 
+    goToToday,
+    selectDate,
     submitGuess,
     todayStr 
   } = useDailyGame();
+
+  const [isStatsModalOpen, setIsStatsModalOpen] = useState(false);
+
+  useEffect(() => {
+    if (gameOver) {
+      setIsStatsModalOpen(true);
+    } else {
+      setIsStatsModalOpen(false);
+    }
+  }, [gameOver, gameDate]);
   
   if (loading) return <div className="min-h-screen bg-[#121212] text-white p-10 flex items-center justify-center font-mono">Loading Daily Challenge...</div>;
 
@@ -38,8 +61,12 @@ export default function Home() {
           userStats={userStats}
           globalStats={globalStats}
           changeDate={changeDate}
+          goToToday={goToToday}
+          selectDate={selectDate}
+          todayStr={todayStr}
           isToday={gameDate >= todayStr}
           isStart={gameDate <= GAME_START_DATE}
+          onOpenStats={() => setIsStatsModalOpen(true)}
         />
         
         <div className="w-full aspect-video bg-[#1a1a1a] border border-[#333] relative">
@@ -75,6 +102,17 @@ export default function Home() {
       </div>
 
       <Footer />
+
+      <StatsModal 
+        isOpen={isStatsModalOpen} 
+        onClose={() => setIsStatsModalOpen(false)} 
+        dayNumber={dayNumber}
+        gameOver={gameOver}
+        hasWon={hasWon}
+        targetCountry={targetCountry}
+        globalStats={globalStats}
+        guesses={guesses}
+      />
 
     </div>
   );

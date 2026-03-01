@@ -8,8 +8,8 @@ import { WorldMapProps } from "@/app/types";
 const colorLegend = [
   { label: "Target", color: "#2E7D32" },
   { label: "Neighbor", color: "#FFEB3B" },
-  { label: "Same Region", color: "#FF9800" },
-  { label: "Same Subregion", color: "#FF5722" },
+  { label: "Same Subregion", color: "#FF9800" },
+  { label: "Same Region", color: "#FF5722" },
   { label: "Incorrect", color: "#B71C1C" },
 ];
 
@@ -54,6 +54,7 @@ export const WorldMap: FC<WorldMapProps> = ({ guesses, targetCountry }) => {
     const paths = svgElement.querySelectorAll('path');
     paths.forEach(p => {
       p.setAttribute("fill", "#555555");
+      p.setAttribute("stroke", "#333");
     });
 
     guesses.forEach((country) => {
@@ -75,21 +76,27 @@ export const WorldMap: FC<WorldMapProps> = ({ guesses, targetCountry }) => {
       switch (connection) {
         case "guess":
           el.setAttribute("fill", "#2E7D32"); 
+          el.setAttribute("stroke", "#2E7D32");
           break;
         case "neighbor":
           el.setAttribute("fill", "#FFEB3B");
+          el.setAttribute("stroke", "#FFEB3B");
           break;
         case "subregion":
-          el.setAttribute("fill", "#FF5722");
+          el.setAttribute("fill", "#FF9800");
+          el.setAttribute("stroke", "#FF9800");
           break;
         case "region":
-          el.setAttribute("fill", "#FF9800"); 
+          el.setAttribute("fill", "#FF5722"); 
+          el.setAttribute("stroke", "#FF5722");
           break;
         case "none":
           el.setAttribute("fill", "#B71C1C"); 
+          el.setAttribute("stroke", "#B71C1C");
           break;
         default:
           el.setAttribute("fill", "#555555");
+          el.setAttribute("stroke", "#333");
       }
     });
 

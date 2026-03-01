@@ -44,14 +44,24 @@ export const HowToPlayModal = ({ isOpen, onClose }: HowToPlayProps) => {
                <Globe className="text-orange-500" size={16} strokeWidth={2.5} />
             </div>
             <div>
-              <strong className="text-orange-400 block">Region Match</strong>
+              <strong className="text-orange-400 block">Subregion Match</strong>
               <p className="text-xs opacity-70">Same subregion.</p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center shrink-0">
+              <Globe className="text-red-500" size={16} strokeWidth={2.5} />
+            </div>
+            <div>
+              <strong className="text-red-400 block">Region Match</strong>
+              <p className="text-xs opacity-70">Same continent / region.</p>
             </div>
           </div>
           
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center shrink-0">
-               <ArrowUp className="text-blue-500" size={16} strokeWidth={2.5} style={{ transform: 'rotate(45deg)' }} />
+              <ArrowUp className="text-blue-500" size={16} strokeWidth={2.5} style={{ transform: 'rotate(45deg)' }} />
             </div>
             <div>
               <strong className="text-blue-400 block">Direction Hint</strong>

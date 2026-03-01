@@ -31,7 +31,7 @@ export const GuessList = ({ guesses, targetCountry, gameOver }: GuessListProps) 
           const guessNum = idx + 1;
 
           let Icon = X;
-          let colorClass = "text-red-500 bg-red-500/10 border-red-500/20";
+          let colorClass = "text-red-700 bg-red-700/10 border-red-700/20";
 
           if (isCorrect) {
             Icon = Check;
@@ -42,7 +42,11 @@ export const GuessList = ({ guesses, targetCountry, gameOver }: GuessListProps) 
           } else if (connection === "subregion") {
             Icon = Globe;
             colorClass = "text-orange-500 bg-orange-500/10 border-orange-500/20";
+          } else if (connection === "region") {
+            Icon = Globe;
+            colorClass = "text-red-500 bg-red-500/10 border-red-500/20";
           }
+
 
           return (
             <li key={idx} className="flex items-center gap-3 p-3 bg-[#121212] border border-[#333] font-mono text-sm relative overflow-hidden transition-all hover:bg-[#1a1a1a] rounded-md group">

@@ -1,13 +1,21 @@
 import { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { GAME_START_DATE, Country, GlobalStats } from "@/app/types";
 import countries from "@/app/lib/countries.json";
 
 export function useDailyGame() {
+    const router = useRouter();
+    const searchParams = useSearchParams();
     const todayStr = new Date().toISOString().split('T')[0];
-    const [gameDate, setGameDate] = useState(todayStr);
+    
+    const initialDate = searchParams.get('date') || todayStr;
+    const initialValidDate = (initialDate >= GAME_START_DATE && initialDate <= todayStr) ? initialDate : todayStr;
+
+    const [gameDate, setGameDate] = useState(initialValidDate);
     const [guesses, setGuesses] = useState<Country[]>([]);
     const [targetCountry, setTargetCountry] = useState<Country | null>(null);
     const [gameOver, setGameOver] = useState(false);
+    const [hasWon, setHasWon] = useState(false);
     const [hintPackages, setHintPackages] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [userStats, setUserStats] = useState({ gamesPlayed: 0, wins: 0, winRate: 0 });
@@ -34,7 +42,40 @@ export function useDailyGame() {
         if (newDate < GAME_START_DATE) return;
         
         setGameDate(newDate);
+        router.push(`/?date=${newDate}`);
+        
         setGameOver(false);
+        setHasWon(false);
+        setGuesses([]);
+        setTargetCountry(null);
+        setLoading(true);
+    };
+
+    const goToToday = () => {
+        if (gameDate === todayStr) return;
+        setGameDate(todayStr);
+        router.push(`/`);
+        setGameOver(false);
+        setHasWon(false);
+        setGuesses([]);
+        setTargetCountry(null);
+        setLoading(true);
+    };
+
+    const selectDate = (newDate: string) => {
+        if (newDate > todayStr) return;
+        if (newDate < GAME_START_DATE) return;
+        if (newDate === gameDate) return;
+        
+        setGameDate(newDate);
+        if (newDate === todayStr) {
+           router.push(`/`);
+        } else {
+           router.push(`/?date=${newDate}`);
+        }
+        
+        setGameOver(false);
+        setHasWon(false);
         setGuesses([]);
         setTargetCountry(null);
         setLoading(true);
@@ -64,6 +105,7 @@ export function useDailyGame() {
                         setGuesses(currentGuesses);
                     }
                     isWon = progData.won;
+                    setHasWon(isWon);
                     
                     if (isWon || currentGuesses.length >= 6) {
                         setGameOver(true);
@@ -138,9 +180,22 @@ export function useDailyGame() {
                 if (progData.guesses) {
                     setGuesses(progData.guesses);
                 }
+                
+                setHasWon(progData.won);
 
+                let isNowGameOver = false;
                 if (progData.won || newGuesses.length >= 6) {
-                    setGameOver(true);
+                    isNowGameOver = true;
+                    
+                    if (progData.won) {
+                        setUserStats(prev => ({ ...prev, wins: prev.wins + 1 }));
+                    }
+
+                    const statsRes = await fetch(`/api/stats?date=${gameDate}`);
+                    if (statsRes.ok) {
+                        const statsData = await statsRes.json();
+                        setGlobalStats(statsData || { totalPlayers: 0, totalWinners: 0, winRate: 0, guessDistribution: {} });
+                    }
                 }
 
                 const gameRes = await fetch(`/api/daily?date=${gameDate}`);
@@ -148,6 +203,10 @@ export function useDailyGame() {
                     const gameData = await gameRes.json();
                     setHintPackages(gameData.hintPackages || []);
                     if (gameData.targetCountry) setTargetCountry(gameData.targetCountry);
+                }
+                
+                if (isNowGameOver) {
+                    setGameOver(true);
                 }
             }
         } catch (err) {
@@ -162,11 +221,14 @@ export function useDailyGame() {
         guesses,
         targetCountry,
         gameOver,
+        hasWon,
         hintPackages,
         loading,
         userStats,
         globalStats,
         changeDate,
+        goToToday,
+        selectDate,
         submitGuess,
         todayStr
     };

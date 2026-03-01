@@ -50,8 +50,12 @@ export interface GameHeaderProps {
   userStats: { wins: number };
   globalStats?: GlobalStats;
   changeDate: (offset: number) => void;
+  goToToday: () => void;
+  selectDate: (date: string) => void;
+  todayStr: string;
   isToday: boolean;
   isStart: boolean;
+  onOpenStats?: () => void;
 }
 
 export interface ModalProps {

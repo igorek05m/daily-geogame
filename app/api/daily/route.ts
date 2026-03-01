@@ -141,7 +141,7 @@ export async function GET(req: NextRequest) {
     const isWon = progress?.won === true;
     const isGameOver = guessesCount >= 6 || isWon;
 
-    const hints = game.hintPackages.map((pkg: any, index: number) => {
+    const hints = (game.hintPackages || []).map((pkg: any, index: number) => {
       if (isGameOver || index < allowedHintsCount) {
         return pkg;
       }

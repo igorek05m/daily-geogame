@@ -13,7 +13,8 @@ A simple, daily geography guessing game inspired by Wordle, Travle and Globle.
 
 ## Tech Stack
 
-- **Next.js** (App Router)
+- **Next.js 16** (App Router)
+- **React 19**
 - **TypeScript**
 - **Tailwind CSS**
 - **MongoDB** (Atlas)

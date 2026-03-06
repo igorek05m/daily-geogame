@@ -1,7 +1,7 @@
 import { GameHeaderProps, GAME_START_DATE } from "@/app/types";
-import { ChevronLeft, ChevronRight, Trophy, BarChart2, CalendarRange } from "lucide-react";
+import { ChevronLeft, ChevronRight, Trophy, BarChart2, CalendarRange, ScrollText } from "lucide-react";
 
-export const GameHeader = ({ dayNumber, gameDate, userStats, changeDate, goToToday, selectDate, todayStr, isToday, isStart, onOpenStats }: GameHeaderProps) => {
+export const GameHeader = ({ dayNumber, gameDate, userStats, changeDate, goToToday, selectDate, todayStr, isToday, isStart, onOpenStats, onOpenChangelog }: GameHeaderProps) => {
   return (
     <div className="w-full max-w-4xl border border-[#333] bg-[#1e1e1e] p-2 flex flex-col md:flex-row justify-between items-center shadow-lg rounded-sm gap-2">
       <div className="flex items-center gap-4">
@@ -53,6 +53,14 @@ export const GameHeader = ({ dayNumber, gameDate, userStats, changeDate, goToTod
       </div>
       
       <div className="flex gap-2">
+        <button 
+          onClick={onOpenChangelog}
+          className="bg-[#333] px-3 py-1 rounded text-blue-400 border border-blue-400/20 hover:bg-blue-900/30 transition-colors flex items-center gap-2 cursor-pointer"
+          title="Changelog"
+        >
+          <ScrollText size={16} />
+        </button>
+
         <button 
           onClick={onOpenStats}
           className="bg-[#333] px-3 py-1 rounded text-purple-400 border border-purple-400/20 hover:bg-purple-900/30 transition-colors flex items-center gap-2 cursor-pointer"

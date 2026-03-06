@@ -76,10 +76,33 @@ export async function GET(req: NextRequest) {
       let factbookData = null;
       let hintPackages: HintPackage[] = [];
 
+      let candidatePool = [...countries];
+      
+      if (client) {
+          try {
+             const db = client.db("geo_game");
+             const lastGames = await db.collection("daily_games")
+                .find({})
+                .sort({ date: -1 })
+                .limit(60)
+                .toArray();
+
+             const usedCodes = new Set(lastGames.map(g => g.targetCountry?.alpha2Code));
+             const filtered = countries.filter(c => !usedCodes.has(c.alpha2));
+             
+             if (filtered.length > 10) {
+                 candidatePool = filtered;
+                 console.log(`Filtered pool size: ${candidatePool.length} (excluded ${usedCodes.size} recent countries)`);
+             }
+          } catch(e) {
+             console.warn("Failed to filter recent countries:", e);
+          }
+      }
+
       while (!targetCountry && attempts < 5) {
         attempts++;
-        const randIndex = Math.floor(Math.random() * countries.length);
-        const candidate = countries[randIndex];
+        const randIndex = Math.floor(Math.random() * candidatePool.length);
+        const candidate = candidatePool[randIndex];
         
         const details = await fetchCountryDetails(candidate.alpha2);
         if (!details) continue;
@@ -88,7 +111,7 @@ export async function GET(req: NextRequest) {
         factbookData = await fetchFactbookData(fips);
 
         if (factbookData) {
-        targetCountry = { ...details, fipsCode: fips };
+          targetCountry = { ...details, fipsCode: fips };
         } else {
           console.log(`Skipping ${candidate.name} - no Factbook data.`);
         }
@@ -97,7 +120,7 @@ export async function GET(req: NextRequest) {
       if (!targetCountry) {
         console.warn("Could not find a valid country after attempts. Forcing fallback.");
         const plDetails = await fetchCountryDetails("PL");
-        const plFactbook = await fetchFactbookData("pl"); 
+        const plFactbook = await fetchFactbookData("pl");
         
         targetCountry = plDetails || {
           name: "Poland", alpha2Code: "PL", alpha3Code: "POL", latlng: [52, 20], 
@@ -111,6 +134,7 @@ export async function GET(req: NextRequest) {
       hintPackages = [];
       
       try {
+        console.log(`Generating unique hints for ${targetCountry.name}...`);
         hintPackages = generateHintPackages(factbookData, targetCountry);
       } catch (err) {
         console.warn("Hint generation error", err);

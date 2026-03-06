@@ -56,6 +56,7 @@ export interface GameHeaderProps {
   isToday: boolean;
   isStart: boolean;
   onOpenStats?: () => void;
+  onOpenChangelog: () => void;
 }
 
 export interface ModalProps {
@@ -65,7 +66,20 @@ export interface ModalProps {
   children: React.ReactNode;
 }
 
-export interface Props {
+export type ChangelogEntry = {
+  version: string;
+  date: string | null;
+  status: string | null;
+  color: "green" | "blue" | "gray" | "yellow" | "red" | "purple";
+  changes: string[];
+};
+
+export interface ChangelogModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export interface HowToPlayProps {
   isOpen: boolean;
   onClose: () => void;
 }

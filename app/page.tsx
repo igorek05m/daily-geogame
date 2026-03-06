@@ -10,6 +10,7 @@ import { LastHint } from '@/app/components/LastHint';
 import { WorldMap } from "@/app/components/Map";
 import { Footer } from "@/app/components/Footer";
 import { StatsModal } from "@/app/components/StatsModal";
+import { ChangelogModal } from "@/app/components/ChangelogModal";
 import { GAME_START_DATE } from "@/app/types";
 
 export default function Home() {
@@ -40,6 +41,7 @@ function GameContent() {
   } = useDailyGame();
 
   const [isStatsModalOpen, setIsStatsModalOpen] = useState(false);
+  const [isChangelogOpen, setIsChangelogOpen] = useState(false);
 
   useEffect(() => {
     if (gameOver) {
@@ -67,6 +69,7 @@ function GameContent() {
           isToday={gameDate >= todayStr}
           isStart={gameDate <= GAME_START_DATE}
           onOpenStats={() => setIsStatsModalOpen(true)}
+          onOpenChangelog={() => setIsChangelogOpen(true)}
         />
         
         <div className="w-full aspect-video bg-[#1a1a1a] border border-[#333] relative">
@@ -112,6 +115,11 @@ function GameContent() {
         targetCountry={targetCountry}
         globalStats={globalStats}
         guesses={guesses}
+      />
+      
+      <ChangelogModal 
+        isOpen={isChangelogOpen} 
+        onClose={() => setIsChangelogOpen(false)} 
       />
 
     </div>

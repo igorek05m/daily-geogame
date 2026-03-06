@@ -1,11 +1,7 @@
 import React from 'react';
 import { Modal } from './Modal';
 import { Check, MapPin, Globe, ArrowUp } from "lucide-react";
-
-interface HowToPlayProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
+import { HowToPlayProps } from '@/app/types';
 
 export const HowToPlayModal = ({ isOpen, onClose }: HowToPlayProps) => {
   return (

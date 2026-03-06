@@ -39,7 +39,7 @@ export async function GET(req: NextRequest) {
     let client;
     try {
       client = await clientPromise;
-    } catch (e) {
+    } catch {
       console.warn("Database connection failed, falling back to in-memory game generation.");
     }
 

@@ -1,12 +1,6 @@
 import React from 'react';
-import { HintPackage } from '@/app/types';
+import { HintPackage, LastHintProps } from '@/app/types';
 import { Lightbulb, ArrowDown } from "lucide-react";
-
-interface LastHintProps {
-  hintPackages: HintPackage[];
-  guesses: unknown[];
-  gameOver: boolean;
-}
 
 export const LastHint: React.FC<LastHintProps> = ({ hintPackages, guesses, gameOver }) => {
     

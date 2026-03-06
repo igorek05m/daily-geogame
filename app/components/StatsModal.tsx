@@ -1,17 +1,7 @@
+import Image from "next/image";
 import { Modal } from "./Modal";
 import { Trophy, Frown, Users, Percent, Info } from "lucide-react";
-import { Country, GlobalStats } from "@/app/types";
-
-interface StatsModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  dayNumber: number;
-  gameOver: boolean;
-  hasWon: boolean;
-  targetCountry: Country | null;
-  globalStats?: GlobalStats;
-  guesses: Country[];
-}
+import { StatsModalProps } from "@/app/types";
 
 export function StatsModal({
   isOpen,
@@ -44,10 +34,12 @@ export function StatsModal({
               <p className="text-gray-400 text-sm mb-2 uppercase tracking-wider">The hidden country was:</p>
               <div className="flex flex-col items-center justify-center gap-3">
                 {targetCountry.flag && (
-                  <img 
-                    src={targetCountry.flag} 
-                    alt={`${targetCountry.name} flag`} 
-                    className="w-20 h-auto drop-shadow-md rounded-sm border border-[#555]" 
+                  <Image
+                    src={targetCountry.flag}
+                    alt={`${targetCountry.name} flag`}
+                    width={80}
+                    height={54}
+                    className="w-20 h-auto drop-shadow-md rounded-sm border border-[#555]"
                   />
                 )}
                 <span className="text-2xl font-bold text-white tracking-widest uppercase">

@@ -80,3 +80,25 @@ export interface GuessListProps {
   targetCountry: Country | null;
   gameOver: boolean;
 }
+
+export interface HowToPlayProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export interface LastHintProps {
+  hintPackages: HintPackage[];
+  guesses: unknown[];
+  gameOver: boolean;
+}
+
+export interface StatsModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  dayNumber: number;
+  gameOver: boolean;
+  hasWon: boolean;
+  targetCountry: Country | null;
+  globalStats?: GlobalStats;
+  guesses: Country[];
+}

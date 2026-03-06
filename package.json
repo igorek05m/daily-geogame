@@ -6,7 +6,7 @@
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint . --ignore-pattern .next --ignore-pattern next-env.d.ts"
   },
   "dependencies": {
     "axios": "^1.11.0",

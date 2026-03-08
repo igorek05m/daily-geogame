@@ -100,6 +100,11 @@ export interface HowToPlayProps {
   onClose: () => void;
 }
 
+export interface Props {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
 export interface LastHintProps {
   hintPackages: HintPackage[];
   guesses: unknown[];

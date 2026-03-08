@@ -79,24 +79,23 @@ export async function GET(req: NextRequest) {
       let candidatePool = [...countries];
       
       if (client) {
-          try {
-             const db = client.db("geo_game");
-             const lastGames = await db.collection("daily_games")
-                .find({})
-                .sort({ date: -1 })
-                .limit(60)
-                .toArray();
+        try {
+          const db = client.db("geo_game");
+          const lastGames = await db.collection("daily_games")
+            .find({})
+            .sort({ date: -1 })
+            .limit(60)
+            .toArray();
 
-             const usedCodes = new Set(lastGames.map(g => g.targetCountry?.alpha2Code));
-             const filtered = countries.filter(c => !usedCodes.has(c.alpha2));
-             
-             if (filtered.length > 10) {
-                 candidatePool = filtered;
-                 console.log(`Filtered pool size: ${candidatePool.length} (excluded ${usedCodes.size} recent countries)`);
-             }
-          } catch(e) {
-             console.warn("Failed to filter recent countries:", e);
+          const usedCodes = new Set(lastGames.map(g => g.targetCountry?.alpha2Code));
+          const filtered = countries.filter(c => !usedCodes.has(c.alpha2));
+          
+          if (filtered.length > 10) {
+            candidatePool = filtered;
           }
+        } catch(e) {
+          console.warn("Failed to filter recent countries:", e);
+        }
       }
 
       while (!targetCountry && attempts < 5) {

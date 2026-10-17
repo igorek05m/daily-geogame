@@ -151,6 +151,16 @@ export function useDailyGame() {
             if (!res.ok) throw new Error("Failed to fetch country data");
             const data = await res.json();
             const details = data[0];
+            if (
+                !details ||
+                !details.name?.common ||
+                !details.cca2 ||
+                !details.cca3 ||
+                !details.latlng ||
+                !details.flags?.svg
+            ) {
+                throw new Error("Country API returned invalid data");
+            }
             
             const countryData: Country = {
                 name: details.name.common,

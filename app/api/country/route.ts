@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { fetchCountryDetails } from '@/app/lib/countryData';
 
 export async function GET(req: NextRequest) {
     const code = req.nextUrl.searchParams.get('code');
@@ -8,16 +9,25 @@ export async function GET(req: NextRequest) {
     }
 
     try {
-        const res = await fetch(`https://restcountries.com/v3.1/alpha/${code}`, {
-            cache: 'force-cache'
-        });
-        
-        if (!res.ok) throw new Error("Failed to fetch from RestCountries");
-        
-        const data = await res.json();
-        return NextResponse.json(data);
-    } catch (e) {
-        console.error("Cache proxy error:", e);
-        return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+        const country = await fetchCountryDetails(code);
+        if (!country) {
+            return NextResponse.json({ error: "Country not found" }, { status: 404 });
+        }
+
+        return NextResponse.json([{
+            name: { common: country.name },
+            cca2: country.alpha2Code,
+            cca3: country.alpha3Code,
+            latlng: country.latlng,
+            borders: country.borders,
+            area: country.area,
+            population: country.population,
+            flags: { svg: country.flag },
+            region: country.region,
+            subregion: country.subregion
+        }]);
+    } catch (error) {
+        console.error("REST Countries request failed:", error);
+        return NextResponse.json({ error: "Country data unavailable" }, { status: 502 });
     }
 }

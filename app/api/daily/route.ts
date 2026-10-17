@@ -4,35 +4,8 @@ import clientPromise from '@/app/lib/mongodb';
 import countries from '@/app/lib/countries.json';
 import { fetchFactbookData, generateHintPackages } from '@/app/lib/factbook';
 import { HintPackage } from '@/app/types';
-import axios from 'axios';
 import { cookies } from 'next/headers';
-
-async function fetchCountryDetails(alpha2: string) {
-  try {
-    const res = await axios.get(`https://restcountries.com/v3.1/alpha/${alpha2}`, {
-      timeout: 5000 
-    });
-
-    if (res.data && res.data.length > 0) {
-      const data = res.data[0];
-      return {
-        name: data.name.common,
-        alpha2Code: data.cca2,
-        alpha3Code: data.cca3,
-        latlng: data.latlng,
-        borders: data.borders || [],
-        area: data.area,
-        population: data.population,
-        flag: data.flags.svg,
-        region: data.region,
-        subregion: data.subregion
-      };
-    }
-  } catch (e) {
-    console.error(`Failed to fetch RestCountries for ${alpha2}`, e);
-  }
-  return null;
-}
+import { fetchCountryDetails } from '@/app/lib/countryData';
 
 export async function GET(req: NextRequest) {
   try {
@@ -103,17 +76,23 @@ export async function GET(req: NextRequest) {
         const randIndex = Math.floor(Math.random() * candidatePool.length);
         const candidate = candidatePool[randIndex];
         
-        const details = await fetchCountryDetails(candidate.alpha2);
+        let details;
+        try {
+          details = await fetchCountryDetails(candidate.alpha2);
+        } catch (error) {
+          console.warn(`Failed to fetch REST Countries data for ${candidate.alpha2}:`, error);
+          continue;
+        }
         if (!details) continue;
 
         const fips = candidate.fipsCode || candidate.alpha2.toLowerCase();
         factbookData = await fetchFactbookData(fips);
 
-        if (factbookData) {
-          targetCountry = { ...details, fipsCode: fips };
-        } else {
-          console.log(`Skipping ${candidate.name} - no Factbook data.`);
+        targetCountry = { ...details, fipsCode: fips };
+        if (!factbookData) {
+          console.log(`Using ${candidate.name} without Factbook data.`);
         }
+        break;
       }
 
       if (!targetCountry) {

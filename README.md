@@ -34,9 +34,12 @@ A simple, daily geography guessing game inspired by Wordle, Travle and Globle.
     ```
 
 3. Setup Environment:
-    Create a .env.local file in the root and add your MongoDB string:
+    Create a .env.local file in the root and add your MongoDB string and REST Countries v5 API key:
 
-    ```MONGODB_URI=mongodb+srv://...```
+    ```env
+    MONGODB_URI=mongodb+srv://...
+    REST_COUNTRIES_API=your_rest_countries_api_key
+    ```
 
 4. Run dev server
     ``` bash

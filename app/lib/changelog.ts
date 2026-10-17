@@ -13,9 +13,22 @@ export const changelogData: ChangelogEntry[] = [
     ]
   },
   {
+    version: "v0.4.0",
+    date: "2026-10-17",
+    status: "Current",
+    color: "green",
+    changes: [
+      "Updated the country API to its new version",
+      "Added local country data to avoid unnecessary API requests",
+      "Fixed an issue where no country could be submitted",
+      "Fixed the daily country falling back to Poland when hints failed",
+      "Fixed country coordinates after the API update"
+    ]
+  },
+  {
     version: "v0.3.0",
     date: "2026-03-06",
-    status: "Current",
+    status: null,
     color: "green",
     changes: [
       "Improved hint variety and randomization",

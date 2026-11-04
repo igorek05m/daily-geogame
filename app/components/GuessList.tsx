@@ -4,20 +4,20 @@ import { Check, X, MapPin, Globe, PartyPopper, Square, ArrowUp, Footprints } fro
 
 export const GuessList = ({ guesses, targetCountry, gameOver }: GuessListProps) => {
   return (
-    <div className="w-full bg-[#1e1e1e] border border-[#333] p-4 rounded-sm shadow-lg">
-      <h2 className="border-b border-[#444] pb-2 mb-2 text-gray-400 font-bold uppercase text-sm flex items-center gap-2">
+    <div className="w-full bg-[#1e1e1e] border border-[#252525] p-4 md:p-5 rounded-lg shadow-sm">
+      <h2 className="border-b border-[#333] pb-3 mb-3 text-[#9ca3af] font-bold uppercase text-xs tracking-wider flex items-center gap-2">
         <Footprints size={16} /> LAST GUESSES:
       </h2>
       
       {gameOver && targetCountry && (
-        <div className="mt-4 p-4 bg-green-900/30 border border-green-600 rounded text-center">
-          <h3 className="text-xl font-bold text-green-400 flex items-center justify-center gap-2">
+        <div className="mt-4 p-4 bg-[#14251a] border border-green-500/30 rounded text-center">
+        <h3 className="text-xl font-bold text-[#22c55e] flex items-center justify-center gap-2">
             <PartyPopper size={24} /> GAME OVER <PartyPopper size={24} />
           </h3>
-          <p className="text-white mt-2">
-            The country was: <span className="font-bold text-yellow-400 text-lg">{targetCountry.name}</span>
+          <p className="text-[#e0e0e0] mt-2">
+            The country was: <span className="font-bold text-[#22c55e] text-lg">{targetCountry.name}</span>
           </p>
-          <p className="text-gray-400 text-sm mt-1">See you tomorrow!</p>
+          <p className="text-[#9ca3af] text-sm mt-1">See you tomorrow.</p>
         </div>
       )}
 
@@ -49,17 +49,17 @@ export const GuessList = ({ guesses, targetCountry, gameOver }: GuessListProps) 
 
 
           return (
-            <li key={idx} className="flex items-center gap-3 p-3 bg-[#121212] border border-[#333] font-mono text-sm relative overflow-hidden transition-all hover:bg-[#1a1a1a] rounded-md group">
+            <li key={idx} className="flex items-center gap-3 p-3 bg-[#121212] border-b border-[#333] text-sm relative overflow-hidden transition-colors duration-200 hover:bg-[#181818] hover:border-[#3b4148] rounded-sm group">
               {isCorrect && <div className="absolute inset-0 bg-green-500/5 animate-pulse pointer-events-none"></div>}
               
-              <span className="text-gray-600 w-6 text-right font-mono select-none text-xs">{guessNum}.</span> 
+              <span className="text-[#6b7280] w-6 text-right font-mono select-none text-xs">{guessNum}.</span>
               
               <div className={`w-10 h-10 rounded-full flex items-center justify-center border ${colorClass} shrink-0`}>
                  <Icon size={20} strokeWidth={2.5} />
               </div>
 
               <div className="flex-grow min-w-0 flex flex-col justify-center">
-                <span className={`font-bold truncate text-base ${isCorrect ? "text-green-400" : "text-gray-200"}`}>
+                <span className={`font-bold truncate text-base ${isCorrect ? "text-[#22c55e]" : "text-[#e0e0e0]"}`}>
                   {guess.name}
                 </span>
               </div>
@@ -72,7 +72,7 @@ export const GuessList = ({ guesses, targetCountry, gameOver }: GuessListProps) 
                   <div className="flex items-center gap-1 text-gray-400" title={`Bearing: ${Math.round(bearingAngle)}°`}>
                      <ArrowUp 
                         size={16} 
-                        className="text-blue-400"
+                        className="text-[#3b82f6]"
                         style={{ transform: `rotate(${bearingAngle}deg)` }} 
                      />
                   </div>
@@ -81,7 +81,7 @@ export const GuessList = ({ guesses, targetCountry, gameOver }: GuessListProps) 
 
               {isCorrect && (
                  <span className="text-green-400 font-bold text-xs md:text-sm animate-bounce whitespace-nowrap sm:flex items-center gap-1">
-                    VICTORY! <PartyPopper size={16} />
+                    CORRECT <PartyPopper size={16} />
                  </span>
               )}
             </li>
@@ -89,10 +89,10 @@ export const GuessList = ({ guesses, targetCountry, gameOver }: GuessListProps) 
         })}
 
         {Array.from({ length: Math.max(0, 6 - guesses.length) }).map((_, i) => (
-          <li key={`empty-${i}`} className="flex items-center gap-3 p-3 text-gray-700 font-mono text-sm border border-dashed border-[#2a2a2a] rounded-md select-none opacity-50">
+          <li key={`empty-${i}`} className="flex items-center gap-3 p-3 text-[#4b5563] font-mono text-sm border border-dashed border-[#333] rounded-md select-none opacity-70">
             <span className="w-6 text-right text-xs">{guesses.length + 1 + i}.</span>
-            <div className="w-10 h-10 rounded-full flex items-center justify-center border border-[#333] bg-[#1a1a1a]">
-              <Square size={16} className="text-gray-600" />
+            <div className="w-10 h-10 rounded-full flex items-center justify-center border border-[#333] bg-[#121212]">
+            <Square size={16} className="text-[#4b5563]" />
             </div>
             <span>...</span>
           </li>

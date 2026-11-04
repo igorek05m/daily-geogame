@@ -104,9 +104,9 @@ export const WorldMap: FC<WorldMapProps> = ({ guesses, targetCountry }) => {
 
 
   return (
-    <div className="w-full h-full flex items-center justify-center bg-[#1a1a1a] border-2 border-dashed border-gray-700 rounded-lg overflow-hidden relative">
+    <div className="w-full h-full flex items-center justify-center bg-[#1a1a1a] border border-[#4b5563] overflow-hidden relative">
       <TransformWrapper
-      limitToBounds={false}
+        limitToBounds={false}
         wheel={{ step: 0.7 }}
         pinch={{ step: 0.18 }}
         doubleClick={{ disabled: false }}
@@ -117,9 +117,9 @@ export const WorldMap: FC<WorldMapProps> = ({ guesses, targetCountry }) => {
         {({ zoomIn, zoomOut, resetTransform }) => (
           <>
             <div className="absolute top-2 right-2 flex flex-col gap-1 z-10">
-              <button className="bg-gray-800 text-white p-1 px-3 hover:bg-gray-700 cursor-pointer" onClick={() => zoomIn()}>+</button>
-              <button className="bg-gray-800 text-white p-1 px-3 hover:bg-gray-700 cursor-pointer" onClick={() => zoomOut()}>-</button>
-              <button className="bg-gray-800 text-white p-1 px-3 hover:bg-gray-700 cursor-pointer" onClick={() => resetTransform()}>R</button>
+              <button aria-label="Zoom in" className="bg-gray-800 text-white p-1 px-3 hover:bg-gray-700 cursor-pointer" onClick={() => zoomIn()}>+</button>
+              <button aria-label="Zoom out" className="bg-gray-800 text-white p-1 px-3 hover:bg-gray-700 cursor-pointer" onClick={() => zoomOut()}>−</button>
+              <button aria-label="Reset map" className="bg-gray-800 text-white p-1 px-3 hover:bg-gray-700 cursor-pointer" onClick={() => resetTransform()}>↺</button>
             </div>
 
             <TransformComponent wrapperClass="!w-full !h-full" contentClass="!w-full !h-full">
@@ -133,8 +133,8 @@ export const WorldMap: FC<WorldMapProps> = ({ guesses, targetCountry }) => {
               />
             </TransformComponent>
             
-            <div className="absolute bottom-2 left-2 bg-black/80 p-2 rounded text-xs text-white z-10 border border-gray-700 pointer-events-none">
-              <h4 className="font-bold mb-1 border-b border-gray-600 pb-1">Legend</h4>
+            <div className="absolute bottom-3 left-3 bg-[#1e1e1e]/95 p-3 rounded text-xs text-[#e0e0e0] z-10 border border-[#333] pointer-events-none">
+              <h4 className="font-bold mb-1 border-b border-[#333] pb-1">Legend</h4>
               <div className="flex flex-col gap-1">
                 {colorLegend.map(l => (
                   <div key={l.label} className="flex items-center gap-2">
@@ -152,4 +152,3 @@ export const WorldMap: FC<WorldMapProps> = ({ guesses, targetCountry }) => {
 };
 
 export default WorldMap;
-

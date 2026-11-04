@@ -13,9 +13,19 @@ export const changelogData: ChangelogEntry[] = [
     ]
   },
   {
+    version: "v0.4.1",
+    date: "2026-11-04",
+    status: "Current",
+    color: "blue",
+    changes: [
+      "Polished the dark theme and overall visual consistency",
+      "Refined spacing, icons, and responsive layouts",
+    ]
+  },
+  {
     version: "v0.4.0",
     date: "2026-10-17",
-    status: "Current",
+    status: null,
     color: "green",
     changes: [
       "Updated the country API to its new version",

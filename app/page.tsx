@@ -15,7 +15,7 @@ import { GAME_START_DATE } from "@/app/types";
 
 export default function Home() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[#121212] text-white p-10 flex items-center justify-center font-mono">Loading Daily Challenge...</div>}>
+    <Suspense fallback={<div className="min-h-screen bg-[#121212] text-[#e0e0e0] p-10 flex items-center justify-center">Loading today&apos;s map...</div>}>
       <GameContent />
     </Suspense>
   );
@@ -51,12 +51,12 @@ function GameContent() {
     }
   }, [gameOver, gameDate]);
   
-  if (loading) return <div className="min-h-screen bg-[#121212] text-white p-10 flex items-center justify-center font-mono">Loading Daily Challenge...</div>;
+  if (loading) return <div className="min-h-screen bg-[#121212] text-[#e0e0e0] p-10 flex items-center justify-center">Loading today&apos;s map...</div>;
 
   return (
     <div className="min-h-screen bg-[#121212] text-[#e0e0e0] font-mono flex flex-col items-center">
       
-      <div className="w-full max-w-4xl flex-grow p-4 flex flex-col gap-6">
+      <div className="w-full max-w-5xl flex-grow px-4 py-6 md:px-8 md:py-8 flex flex-col gap-5">
         <GameHeader 
           dayNumber={dayNumber}
           gameDate={gameDate}
@@ -72,11 +72,8 @@ function GameContent() {
           onOpenChangelog={() => setIsChangelogOpen(true)}
         />
         
-        <div className="w-full aspect-video bg-[#1a1a1a] border border-[#333] relative">
+        <div className="w-full h-[250px] sm:h-[380px] md:h-[560px] bg-[#1a1a1a] relative">
            <WorldMap guesses={guesses} targetCountry={targetCountry} />
-           <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-black/70 px-4 py-1 rounded text-sm border border-gray-600 pointer-events-none">
-              INTERACTIVE MAP
-           </div>
         </div>
 
         <GuessInput 

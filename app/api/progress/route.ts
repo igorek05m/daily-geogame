@@ -3,16 +3,72 @@ import clientPromise from '@/app/lib/mongodb';
 import { v4 as uuidv4 } from 'uuid';
 import { cookies } from 'next/headers';
 import { getDistanceFromLatLonInKm, getBearingAngle } from "@/app/lib/geoUtils";
+import countries from '@/app/lib/countries.json';
+import { GAME_START_DATE, Country } from '@/app/types';
+
+type SubmittedGuess = Pick<Country, 'name' | 'alpha2Code' | 'alpha3Code' | 'latlng' | 'flag' | 'region' | 'subregion' | 'connection'>;
+type StoredGuess = {
+    name: string;
+    alpha2Code: string;
+    alpha3Code?: string;
+    flag?: string;
+    latlng: [number, number];
+    distance?: number;
+    bearing?: number;
+    connection?: Country['connection'];
+};
 
 export async function POST(req: NextRequest) {
     try {
         const body = await req.json();
-        const { date } = body; 
-        let { guesses } = body;
+        const { date } = body;
+        let { guesses } = body as { date?: unknown; guesses?: unknown };
 
-        if (!date || !Array.isArray(guesses)) {
+        const today = new Date().toISOString().split('T')[0];
+        if (
+            typeof date !== 'string' ||
+            !/^\d{4}-\d{2}-\d{2}$/.test(date) ||
+            date < GAME_START_DATE ||
+            date > today ||
+            !Array.isArray(guesses) ||
+            guesses.length === 0 ||
+            guesses.length > 6
+        ) {
             return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
         }
+
+        const countryByName = new Map(
+            countries.map((country) => [country.name.toLowerCase(), country])
+        );
+        const submittedGuesses = guesses as SubmittedGuess[];
+        const validGuesses = submittedGuesses.every((guess) => {
+            if (
+                !guess ||
+                typeof guess.name !== 'string' ||
+                typeof guess.alpha2Code !== 'string' ||
+                !Array.isArray(guess.latlng) ||
+                guess.latlng.length < 2 ||
+                !guess.latlng.every((value) => typeof value === 'number' && Number.isFinite(value))
+            ) {
+                return false;
+            }
+
+            const country = countryByName.get(guess.name.toLowerCase());
+            return country?.alpha2.toLowerCase() === guess.alpha2Code.toLowerCase();
+        });
+
+        if (!validGuesses) {
+            return NextResponse.json({ error: "Invalid guesses" }, { status: 400 });
+        }
+
+        let storedGuesses: StoredGuess[] = submittedGuesses.map((guess) => ({
+            name: guess.name,
+            alpha2Code: guess.alpha2Code,
+            alpha3Code: guess.alpha3Code,
+            flag: guess.flag,
+            latlng: guess.latlng,
+            connection: guess.connection
+        }));
 
         const cookieStore = await cookies();
         let sessionId = cookieStore.get('geo_session')?.value;
@@ -32,14 +88,14 @@ export async function POST(req: NextRequest) {
             const targetLat = dailyGame.targetCountry.latlng[0];
             const targetLng = dailyGame.targetCountry.latlng[1];
 
-            guesses = guesses.map((g: any) => {
+            storedGuesses = submittedGuesses.map((g) => {
                 const lat = Array.isArray(g.latlng) && g.latlng.length >= 2 ? g.latlng[0] : 0;
                 const lng = Array.isArray(g.latlng) && g.latlng.length >= 2 ? g.latlng[1] : 0;
                 
                 const distance = Math.round(getDistanceFromLatLonInKm(lat, lng, targetLat, targetLng));
                 const bearing = Math.round(getBearingAngle(lat, lng, targetLat, targetLng));
 
-                let connection = "none";
+                let connection: Country['connection'] = "none";
                 
                 if (g.alpha3Code && dailyGame.targetCountry.alpha3Code) {
                     if (dailyGame.targetCountry.alpha3Code === g.alpha3Code) connection = "guess";
@@ -62,7 +118,7 @@ export async function POST(req: NextRequest) {
 
             });
 
-            const newestGuess = guesses[0];
+            const newestGuess = storedGuesses[0];
             if (newestGuess.name?.toLowerCase() === dailyGame.targetCountry.name.toLowerCase()) {
                 isWon = true;
             }
@@ -70,11 +126,11 @@ export async function POST(req: NextRequest) {
 
         await collection.updateOne(
             { sessionId, date },
-            { $set: { guesses, won: isWon, lastPlayed: new Date() } },
+            { $set: { guesses: storedGuesses, won: isWon, lastPlayed: new Date() } },
             { upsert: true }
         );
 
-        const response = NextResponse.json({ success: true, sessionId, won: isWon, guesses });
+        const response = NextResponse.json({ success: true, sessionId, won: isWon, guesses: storedGuesses });
         const isProd = process.env.NODE_ENV === 'production';
 
         response.cookies.set('geo_session', sessionId, {

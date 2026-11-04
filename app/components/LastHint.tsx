@@ -32,44 +32,34 @@ export const LastHint: React.FC<LastHintProps> = ({ hintPackages, guesses, gameO
     if (!currentHint) return null;
 
     return (
-        <div className="w-full bg-[#1e1e1e] border-l-4 border-blue-500 p-4 rounded-sm shadow-lg mb-4 flex flex-col gap-3 animate-in fade-in slide-in-from-top-2 relative">
+        <div className="w-full bg-[#1e1e1e] border border-[#252525] border-l-2 border-l-[#22c55e] p-5 rounded-lg mb-3 flex flex-col gap-4 relative">
             <div className="flex items-start gap-3">
-                <div className="mt-1 p-1 bg-blue-500/10 rounded-full">
-                    <Lightbulb size={20} className="text-blue-400" />
+                <div className="mt-1 p-1.5 bg-[#22c55e]/10 rounded-full shrink-0">
+                    <Lightbulb size={18} className="text-[#22c55e]" />
                 </div>
-                <div className="flex-grow">
-                    <div className="flex justify-between items-center mb-1">
-                        <span className="text-xs font-bold uppercase text-blue-400 tracking-wider">
-                            Current Hint ({hintToShowIndex + 1}/{allHints.length})
+                <div className="flex-grow min-w-0">
+                    <div className="flex items-center justify-between gap-3 mb-2">
+                        <span className="text-xs text-[#9ca3af]">
+                            Hint {hintToShowIndex + 1} of {allHints.length}
                         </span>
-                        <span className="text-[10px] uppercase text-gray-500 border border-[#333] px-1 rounded">
+                        <span className="text-[10px] uppercase text-[#6b7280] tracking-wide">
                             {currentHint.packageTitle}
                         </span>
                     </div>
-                    
-                    <h3 className="text-gray-400 text-xs font-semibold uppercase mb-1">
+                    <h3 className="text-[#9ca3af] text-xs uppercase font-semibold mb-1">
                         {currentHint.label}
                     </h3>
-                    <p className="text-white font-mono text-base font-medium">
+                    <p className="text-[#e0e0e0] text-base leading-relaxed break-words">
                         {currentHint.value}
                     </p>
-                    
-                    <div className="mt-2 text-[10px] text-gray-600 italic">
-                        {hintToShowIndex < allHints.length - 1 
-                            ? `Next hint unlocks after guess #${hintToShowIndex + 1}` 
-                            : "All hints revealed!"
-                        }
-                    </div>
                 </div>
             </div>
             
             <button 
                 onClick={scrollToAllHints}
-                className="w-full text-center text-[14px] text-gray-500 hover:text-white mt-1 pt-2 border-t border-[#333] flex items-center justify-center gap-1 transition-colors cursor-pointer"
+                className="self-center border-t border-[#252525] pt-3 text-sm text-[#9ca3af] hover:text-[#e0e0e0] hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-1 cursor-pointer"
             >   
-                <span className="flex items-center gap-1 animate-bounce-subtle">
-                    View all hints <ArrowDown size={14} />
-                </span>
+                See all hints <ArrowDown size={14} />
             </button>
         </div>
     );

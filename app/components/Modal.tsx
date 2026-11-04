@@ -10,13 +10,13 @@ export const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-between items-center p-4 border-b border-[#333]">
-          <h2 className="text-xl font-bold text-white uppercase tracking-wider">{title}</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-white transition-colors text-2xl leading-none cursor-pointer">
+          <h2 className="text-xl font-bold text-[#3b82f6] uppercase tracking-wider">{title}</h2>
+          <button aria-label="Close dialog" onClick={onClose} className="text-[#9ca3af] hover:text-[#22c55e] transition-colors text-2xl leading-none cursor-pointer">
             &times;
           </button>
         </div>
 
-        <div className="p-6 overflow-y-auto text-gray-300 font-mono text-sm leading-relaxed space-y-4">
+        <div className="p-6 overflow-y-auto text-[#d1d5db] text-sm leading-relaxed space-y-4">
           {children}
         </div>
       </div>

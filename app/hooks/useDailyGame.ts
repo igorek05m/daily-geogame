@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { GAME_START_DATE, Country, GlobalStats } from "@/app/types";
+import { GAME_START_DATE, Country, GlobalStats, HintPackage } from "@/app/types";
 import countries from "@/app/lib/countries.json";
 
 export function useDailyGame() {
@@ -16,7 +16,7 @@ export function useDailyGame() {
     const [targetCountry, setTargetCountry] = useState<Country | null>(null);
     const [gameOver, setGameOver] = useState(false);
     const [hasWon, setHasWon] = useState(false);
-    const [hintPackages, setHintPackages] = useState<any[]>([]);
+    const [hintPackages, setHintPackages] = useState<HintPackage[]>([]);
     const [loading, setLoading] = useState(true);
     const [userStats, setUserStats] = useState({ gamesPlayed: 0, wins: 0, winRate: 0 });
     const [globalStats, setGlobalStats] = useState<GlobalStats>({

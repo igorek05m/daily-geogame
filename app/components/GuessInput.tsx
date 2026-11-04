@@ -80,19 +80,20 @@ export const GuessInput = ({ onGuess, gameOver }: GuessInputProps) => {
             onChange={handleChange}
             onKeyDown={handleKeyDown}
             placeholder="Enter country name..."
-            className="w-full bg-[#1e1e1e] border border-[#333] p-3 text-white focus:outline-none focus:border-green-500 rounded-sm uppercase placeholder:normal-case"
+            aria-label="Country guess"
+            className="w-full bg-[#1e1e1e] border border-[#333] p-3.5 text-[#e0e0e0] focus:outline-none focus:border-[#3b82f6] rounded-md placeholder:text-[#6b7280]"
             disabled={gameOver}
           />
           {showSuggestions && inputVal && (
-            <ul ref={listRef} className="absolute left-0 right-0 top-full mt-1 bg-[#252525] border border-[#444] max-h-60 overflow-y-auto shadow-2xl z-50">
+            <ul ref={listRef} className="absolute left-0 right-0 top-full mt-1 bg-[#1e1e1e] border border-[#333] max-h-60 overflow-y-auto shadow-xl z-50 rounded-md">
               {currentFilteredCountries.map((c, index) => (
                 <li 
                   key={c.name} 
                   onClick={() => handleSelect(c.name)}
                   className={`p-2 cursor-pointer border-b border-[#333] last:border-b-0 flex justify-between items-center
                   ${index === selectedIndex 
-                    ? "bg-[#333] text-green-400 border-l-4 border-l-green-500 pl-1"
-                    : "hover:bg-[#333] hover:text-green-400 text-gray-300"
+                    ? "bg-[#333] text-[#3b82f6] border-l-4 border-l-[#22c55e] pl-1"
+                    : "hover:bg-[#333] hover:text-[#3b82f6] text-[#d1d5db]"
                   }`}
                 >
                   {c.name}
@@ -105,7 +106,7 @@ export const GuessInput = ({ onGuess, gameOver }: GuessInputProps) => {
         <button 
           onClick={handleGuess}
           disabled={gameOver || !inputVal}
-          className="bg-green-700 hover:bg-green-600 text-white px-6 font-bold border border-green-500 disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed shadow-[0_0_10px_rgba(0,255,0,0.2)] rounded-sm"
+          className="bg-[#22c55e] hover:bg-[#15803d] text-white px-6 font-bold disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed rounded-md"
         >
           GUESS
         </button>

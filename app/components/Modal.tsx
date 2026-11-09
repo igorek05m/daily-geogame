@@ -1,12 +1,12 @@
 import { ModalProps } from "@/app/types";
 
-export const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
+export const Modal = ({ isOpen, onClose, title, wide = false, children }: ModalProps) => {
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-[999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" onClick={onClose}>
       <div 
-        className="bg-[#1e1e1e] border border-[#333] w-full max-w-lg rounded-lg shadow-2xl relative flex flex-col max-h-[90vh]" 
+        className={`bg-[#1e1e1e] border border-[#333] w-full ${wide ? "max-w-3xl" : "max-w-lg"} rounded-lg shadow-2xl relative flex flex-col max-h-[90vh]`}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-between items-center p-4 border-b border-[#333]">

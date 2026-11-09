@@ -23,7 +23,20 @@ export function useDailyGame() {
         totalPlayers: 0,
         totalWinners: 0,
         winRate: 0,
-        guessDistribution: {}
+        guessDistribution: {},
+        overallPlayers: 0,
+        totalGames: 0,
+        completedGames: 0,
+        totalWins: 0,
+        totalLosses: 0,
+        totalGuesses: 0,
+        completionRate: 0,
+        overallWinRate: 0,
+        averageGuessesPerGame: 0,
+        activeDays: 0,
+        averageGamesPerSession: 0,
+        averageWinsPerSession: 0,
+        dailyActivity: []
     });
 
     const getDayNumber = (dateStr: string) => {
@@ -86,10 +99,11 @@ export function useDailyGame() {
             try {
                 setLoading(true);
 
-                const [progRes, gameRes, statsRes] = await Promise.all([
+                const [progRes, gameRes, statsRes, analyticsRes] = await Promise.all([
                     fetch(`/api/progress?date=${gameDate}`),
                     fetch(`/api/daily?date=${gameDate}`),
-                    fetch(`/api/stats?date=${gameDate}`)
+                    fetch(`/api/stats?date=${gameDate}`),
+                    fetch("/api/analytics")
                 ]);
 
                 let isWon = false;
@@ -120,7 +134,12 @@ export function useDailyGame() {
 
                 if (statsRes.ok) {
                     const statsData = await statsRes.json();
-                    setGlobalStats(statsData || { totalPlayers: 0, totalWinners: 0, winRate: 0 });
+                    setGlobalStats(statsData);
+                }
+
+                if (analyticsRes.ok) {
+                    const analyticsData = await analyticsRes.json();
+                    setGlobalStats(prev => ({ ...prev, ...analyticsData }));
                 }
 
             } catch (error) {
@@ -201,10 +220,16 @@ export function useDailyGame() {
                         setUserStats(prev => ({ ...prev, wins: prev.wins + 1 }));
                     }
 
-                    const statsRes = await fetch(`/api/stats?date=${gameDate}`);
-                    if (statsRes.ok) {
-                        const statsData = await statsRes.json();
-                        setGlobalStats(statsData || { totalPlayers: 0, totalWinners: 0, winRate: 0, guessDistribution: {} });
+                    const [statsRes, analyticsRes] = await Promise.all([
+                        fetch(`/api/stats?date=${gameDate}`),
+                        fetch("/api/analytics")
+                    ]);
+                    if (statsRes.ok && analyticsRes.ok) {
+                        const [statsData, analyticsData] = await Promise.all([
+                            statsRes.json(),
+                            analyticsRes.json()
+                        ]);
+                        setGlobalStats({ ...statsData, ...analyticsData });
                     }
                 }
 

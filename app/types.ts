@@ -42,6 +42,19 @@ export type GlobalStats = {
   totalWinners: number;
   winRate: number;
   guessDistribution?: Record<string, number>;
+  overallPlayers: number;
+  totalGames: number;
+  completedGames: number;
+  totalWins: number;
+  totalLosses: number;
+  totalGuesses: number;
+  completionRate: number;
+  overallWinRate: number;
+  averageGuessesPerGame: number;
+  activeDays: number;
+  averageGamesPerSession: number;
+  averageWinsPerSession: number;
+  dailyActivity: { date: string; players: number }[];
 };
 
 export interface GameHeaderProps {
@@ -56,6 +69,7 @@ export interface GameHeaderProps {
   isToday: boolean;
   isStart: boolean;
   onOpenStats?: () => void;
+  onOpenAnalytics?: () => void;
   onOpenChangelog: () => void;
 }
 
@@ -63,6 +77,7 @@ export interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   title: string;
+  wide?: boolean;
   children: React.ReactNode;
 }
 

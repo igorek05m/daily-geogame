@@ -9,6 +9,7 @@ import { HintGrid } from '@/app/components/HintGrid';
 import { LastHint } from '@/app/components/LastHint';
 import { WorldMap } from "@/app/components/Map";
 import { Footer } from "@/app/components/Footer";
+import { CommunityAnalyticsModal } from "@/app/components/CommunityAnalyticsModal";
 import { StatsModal } from "@/app/components/StatsModal";
 import { ChangelogModal } from "@/app/components/ChangelogModal";
 import { GAME_START_DATE } from "@/app/types";
@@ -41,6 +42,7 @@ function GameContent() {
   } = useDailyGame();
 
   const [isStatsModalOpen, setIsStatsModalOpen] = useState(false);
+  const [isAnalyticsOpen, setIsAnalyticsOpen] = useState(false);
   const [isChangelogOpen, setIsChangelogOpen] = useState(false);
 
   useEffect(() => {
@@ -69,6 +71,7 @@ function GameContent() {
           isToday={gameDate >= todayStr}
           isStart={gameDate <= GAME_START_DATE}
           onOpenStats={() => setIsStatsModalOpen(true)}
+          onOpenAnalytics={() => setIsAnalyticsOpen(true)}
           onOpenChangelog={() => setIsChangelogOpen(true)}
         />
         
@@ -101,7 +104,15 @@ function GameContent() {
 
       </div>
 
-      <Footer />
+      <Footer
+        onOpenActivity={() => setIsAnalyticsOpen(true)}
+      />
+      <CommunityAnalyticsModal
+        isOpen={isAnalyticsOpen}
+        onClose={() => setIsAnalyticsOpen(false)}
+        globalStats={globalStats}
+        gameDate={gameDate}
+      />
 
       <StatsModal 
         isOpen={isStatsModalOpen} 

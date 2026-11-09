@@ -1,7 +1,7 @@
 import { GameHeaderProps, GAME_START_DATE } from "@/app/types";
-import { ChevronLeft, ChevronRight, Trophy, BarChart2, CalendarRange, ScrollText, Dumbbell } from "lucide-react";
+import { ChevronLeft, ChevronRight, Trophy, BarChart2, CalendarRange, ScrollText, Dumbbell, Activity } from "lucide-react";
 
-export const GameHeader = ({ dayNumber, gameDate, userStats, changeDate, goToToday, selectDate, todayStr, isToday, isStart, onOpenStats, onOpenChangelog }: GameHeaderProps) => {
+export const GameHeader = ({ dayNumber, gameDate, userStats, changeDate, goToToday, selectDate, todayStr, isToday, isStart, onOpenStats, onOpenAnalytics, onOpenChangelog }: GameHeaderProps) => {
   return (
     <div className="w-full pb-1 flex flex-col lg:flex-row justify-between items-stretch lg:items-end gap-5">
       <div className="flex items-center justify-between gap-2 sm:gap-4">
@@ -14,7 +14,7 @@ export const GameHeader = ({ dayNumber, gameDate, userStats, changeDate, goToTod
           <ChevronLeft />
         </button>
         <div className="text-center flex flex-col items-center group relative cursor-pointer" onClick={() => (document.querySelector('input[type="date"]') as HTMLInputElement)?.showPicker?.()}>
-          <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-green-400 leading-tight flex items-center justify-center gap-2">
+          <h1 className="whitespace-nowrap text-xl sm:text-3xl font-black tracking-tight text-green-400 leading-tight flex items-center justify-center gap-1.5 sm:gap-2">
             DAILY GEO <span className="text-[#22c55e]">#{dayNumber}</span>
             <CalendarRange size={16} className="text-gray-500 group-hover:text-green-400 transition-colors" />
           </h1>
@@ -54,20 +54,20 @@ export const GameHeader = ({ dayNumber, gameDate, userStats, changeDate, goToTod
         )}
       </div>
       
-      <div className="flex gap-2 justify-end">
+      <div className="flex flex-nowrap items-center justify-end gap-1.5 sm:gap-2">
         <button
           disabled
           aria-label="Training mode coming soon"
-          className="flex items-center gap-2 rounded bg-[#292929] px-3 py-2 text-sm font-bold text-gray-600 border border-[#3a3a3a] cursor-not-allowed"
+          className="flex h-9 w-9 shrink-0 items-center justify-center rounded bg-[#292929] text-sm font-bold text-gray-600 border border-[#3a3a3a] cursor-not-allowed"
           title="Training Mode — coming soon"
         >
-          <Dumbbell size={16} /> <span className="hidden sm:inline">Training</span>
+          <Dumbbell size={16} />
         </button>
 
         <button 
           onClick={onOpenChangelog}
           aria-label="Open changelog"
-          className="bg-[#333] px-3 py-2 rounded text-blue-400 border border-blue-400/20 hover:bg-blue-900/30 transition-colors flex items-center gap-2 cursor-pointer"
+          className="flex h-9 w-9 shrink-0 items-center justify-center rounded bg-[#333] text-blue-400 border border-blue-400/20 hover:bg-blue-900/30 transition-colors cursor-pointer sm:w-auto sm:gap-2 sm:px-3"
           title="Changelog"
         >
           <ScrollText size={16} />
@@ -76,13 +76,22 @@ export const GameHeader = ({ dayNumber, gameDate, userStats, changeDate, goToTod
         <button 
           onClick={onOpenStats}
           aria-label="Open statistics"
-          className="bg-[#333] px-3 py-2 rounded text-purple-400 border border-purple-400/20 hover:bg-purple-900/30 transition-colors flex items-center gap-2 cursor-pointer"
+          className="flex h-9 w-9 shrink-0 items-center justify-center rounded bg-[#333] text-purple-400 border border-purple-400/20 hover:bg-purple-900/30 transition-colors cursor-pointer sm:w-auto sm:gap-2 sm:px-3"
           title="Daily Stats"
         >
           <BarChart2 size={16} />
         </button>
-        
-        <div className="bg-[#333] px-3 py-2 rounded text-[#facc15] border border-[#854d0e] flex items-center gap-2 text-sm font-bold">
+
+        <button
+          onClick={onOpenAnalytics}
+          aria-label="Open community analytics"
+          className="flex h-9 w-9 shrink-0 items-center justify-center rounded border border-cyan-400/30 bg-[#333] text-cyan-300 transition-colors hover:bg-cyan-900/30 cursor-pointer sm:w-auto sm:gap-2 sm:px-3"
+          title="Community analytics"
+        >
+          <Activity size={16} />
+        </button>
+
+        <div className="flex h-9 shrink-0 items-center gap-2 rounded bg-[#333] px-2 text-[#facc15] border border-[#854d0e] text-xs font-bold sm:px-3 sm:text-sm">
           <Trophy size={16} /> <span>{userStats.wins} wins</span>
         </div>
       </div>

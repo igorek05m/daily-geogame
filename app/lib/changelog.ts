@@ -8,14 +8,24 @@ export const changelogData: ChangelogEntry[] = [
     color: "yellow",
     changes: [
       "Training Mode (Unlimited play without daily restriction)",
-      "Difficulty Levels (Easy/Hard)",
-      "Statistics & Streak tracking improvements"
+      "Difficulty Levels (Easy/Hard)"
+    ]
+  },
+  {
+    version: "v0.5.0",
+    date: "2026-11-09",
+    status: "Current",
+    color: "purple",
+    changes: [
+      "Added Community Analytics with overall game statistics",
+      "Added visible Analytics button to the game header",
+      "Improved responsive header controls on smaller screens"
     ]
   },
   {
     version: "v0.4.1",
     date: "2026-11-04",
-    status: "Current",
+    status: null,
     color: "blue",
     changes: [
       "Polished the dark theme and overall visual consistency",

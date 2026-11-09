@@ -1,6 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import clientPromise from '@/app/lib/mongodb';
 
+type GuessDistributionRow = {
+    _id: number;
+    count: number;
+};
+
 export async function GET(req: NextRequest) {
     try {
         const url = new URL(req.url);
@@ -12,18 +17,19 @@ export async function GET(req: NextRequest) {
         const db = client.db("geo_game");
         const collection = db.collection("user_progress");
 
-        const totalPlayers = await collection.countDocuments({ date });
-        const totalWinners = await collection.countDocuments({ date, won: true });
-
-        const distribution = await collection.aggregate([
-            { $match: { date: date, won: true } },
-            { $project: { numberOfGuesses: { $size: "$guesses" } } },
-            { $group: { _id: "$numberOfGuesses", count: { $sum: 1 } } },
-            { $sort: { _id: 1 } }
-        ]).toArray();
+        const [totalPlayers, totalWinners, distribution] = await Promise.all([
+            collection.countDocuments({ date }),
+            collection.countDocuments({ date, won: true }),
+            collection.aggregate<GuessDistributionRow>([
+                { $match: { date, won: true } },
+                { $project: { numberOfGuesses: { $size: "$guesses" } } },
+                { $group: { _id: "$numberOfGuesses", count: { $sum: 1 } } },
+                { $sort: { _id: 1 } }
+            ]).toArray()
+        ]);
 
         const guessDistribution: Record<string, number> = {};
-        distribution.forEach((item: any) => {
+        distribution.forEach((item) => {
             guessDistribution[item._id] = item.count;
         });
 
